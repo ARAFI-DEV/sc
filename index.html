@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFE SYSTEM - COOL MILKY BLUE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Kanit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* COOL MILKY BLUE DESIGN SYSTEM TOKENS */
+        :root {
+            /* Backgrounds */
+            --bg-grid: #D2E0EB;         /* สีฟ้าอมเทาอ่อนๆ สำหรับพื้นหลัง */
+            --paper: #F4F8FA;           /* สีขาวอมฟ้าใส่นม สำหรับการ์ด */
+            --black: #1A2634;           /* สีดำอมน้ำเงินเข้ม (แทนดำสนิท) */
+            --white: #FFFFFF;
+
+            /* Cool Tones Palette */
+            --milky-ice: #CBE0ED;       /* ฟ้าอ่อนใส่นม */
+            --milky-sky: #A4C3D2;       /* ฟ้าตุ่นๆ */
+            --milky-medium: #7B9DBA;    /* น้ำเงินกลางใส่นม */
+            --milky-dark: #4F759B;      /* น้ำเงินเข้มใส่นม (พระเอก) */
+
+            /* Thinner Borders */
+            --border-thick: 2px solid var(--black);
+            --border-thin: 1px solid var(--black);
+
+            /* Softer Shadows */
+            --shadow-1: 3px 3px 0px var(--black);
+            --shadow-2: 5px 5px 0px var(--black);
+
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        body {
+            /* Light Cool Grid Background */
+            background-color: var(--bg-grid);
+            background-image:
+                linear-gradient(rgba(255,255,255,0.6) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(255,255,255,0.6) 2px, transparent 2px);
+            background-size: 50px 50px;
+            background-attachment: fixed;
+
+            color: var(--black);
+            font-family: 'Kanit', sans-serif;
+            padding: var(--space-lg);
+            line-height: 1.5;
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3, .sys-font {
+            font-family: 'Archivo Black', 'Kanit', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* HEADER SECTION */
+        header {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            border: var(--border-thick);
+            background: var(--milky-dark); /* ใช้สีน้ำเงินเข้มใส่นม */
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-2);
+        }
+
+        @media (min-width: 992px) {
+            header {
+                grid-template-columns: auto 1fr auto;
+                align-items: center;
+                position: sticky;
+                top: var(--space-lg);
+                z-index: 100;
+            }
+        }
+
+        .title-block h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1;
+            letter-spacing: -1px;
+            background: var(--white);
+            color: var(--black);
+            display: inline-block;
+            padding: 5px 15px;
+            border: var(--border-thick);
+            box-shadow: var(--shadow-1);
+        }
+
+        .title-block p {
+            font-weight: 700;
+            background: var(--milky-ice);
+            color: var(--black);
+            display: inline-block;
+            padding: 4px 12px;
+            border: var(--border-thick);
+            margin-top: 12px;
+        }
+
+        .clock-badge {
+            background: var(--white);
+            color: var(--milky-dark);
+            border: var(--border-thick);
+            padding: var(--space-sm) var(--space-md);
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: var(--shadow-1);
+            text-align: center;
+        }
+
+        .controls-block {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        @media (min-width: 768px) {
+            .controls-block { flex-direction: row; }
+        }
+
+        select {
+            appearance: none;
+            background: var(--milky-sky);
+            border: var(--border-thick);
+            padding: 12px var(--space-md);
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Kanit', sans-serif;
+            color: var(--black);
+            cursor: pointer;
+            box-shadow: var(--shadow-1);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        select:nth-child(2) {
+            background: var(--white);
+        }
+
+        select:focus, select:hover {
+            background: var(--milky-ice);
+        }
+
+        select:active {
+            box-shadow: none;
+            transform: translate(3px, 3px);
+        }
+
+        /* TARGET BOARD */
+        .target-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        @media (min-width: 992px) {
+            .target-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .target-card {
+            border: var(--border-thick);
+            box-shadow: var(--shadow-2);
+            background: var(--white);
+        }
+
+        .target-header {
+            padding: var(--space-sm) var(--space-md);
+            border-bottom: var(--border-thick);
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            color: var(--black);
+        }
+
+        .bg-level-1 { background: var(--milky-ice); }
+        .bg-level-2 { background: var(--milky-sky); }
+        .bg-level-3 { background: var(--milky-medium); color: var(--white); }
+        .bg-level-4 { background: var(--milky-dark); color: var(--white); }
+
+        .target-body {
+            padding: var(--space-md);
+            font-weight: 600;
+            font-size: 1.05rem;
+            white-space: pre-line;
+            min-height: 120px;
+            background: var(--paper);
+        }
+
+        /* 3 COLUMN ROUTINE GRID */
+        .routine-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            align-items: start;
+        }
+
+        @media (min-width: 1200px) {
+            .routine-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .col-wrapper {
+            border: var(--border-thick);
+            background: var(--paper);
+            box-shadow: var(--shadow-2);
+        }
+
+        .col-header-box {
+            border-bottom: var(--border-thick);
+            padding: var(--space-md);
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .task-container {
+            padding: var(--space-md);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .task-item {
+            border: var(--border-thick);
+            padding: var(--space-md);
+            background: var(--white);
+            box-shadow: var(--shadow-1);
+            transition: none;
+        }
+
+        .task-item.past {
+            opacity: 0.6;
+            box-shadow: none;
+            background: #EAEAEA;
+            border: var(--border-thin);
+        }
+
+        .task-item.current {
+            background: var(--milky-dark); /* Highlight ด้วยสีน้ำเงินเข้ม */
+            color: var(--white);
+            border: var(--border-thick);
+            box-shadow: 6px 6px 0px var(--black);
+            transform: scale(1.02);
+        }
+
+        .t-time {
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: inline-block;
+            background: var(--white);
+            color: var(--black);
+            padding: 2px 8px;
+            border: var(--border-thin);
+        }
+
+        .task-item.current .t-time {
+            background: var(--milky-sky);
+            color: var(--black);
+            border: var(--border-thick);
+        }
+
+        .t-title { font-weight: 800; font-size: 1.15rem; margin-bottom: 4px; line-height: 1.2; text-transform: uppercase; }
+        .t-desc { font-weight: 500; font-size: 0.9rem; white-space: pre-line; color: #444; }
+        .task-item.current .t-title, .task-item.current .t-desc { color: var(--white); }
+
+        /* DATABASE SECTION (ACCORDIONS) */
+        .db-header {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            text-align: center;
+            background: var(--white);
+            border: var(--border-thick);
+            padding: 10px;
+            box-shadow: var(--shadow-1);
+            display: inline-block;
+        }
+
+        .accordion {
+            border: var(--border-thick);
+            margin-bottom: var(--space-md);
+            box-shadow: var(--shadow-1);
+            background: var(--white);
+        }
+
+        .accordion summary {
+            padding: var(--space-md);
+            font-weight: 800;
+            font-size: 1.2rem;
+            background: var(--milky-ice);
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion:nth-child(even) summary { background: var(--milky-sky); }
+        .accordion:nth-child(3n) summary { background: var(--milky-medium); color: var(--white); }
+
+        .accordion summary::-webkit-details-marker { display: none; }
+        .accordion summary::after { content: '+'; font-size: 1.5rem; }
+        .accordion[open] summary::after { content: '×'; }
+        .accordion[open] summary { border-bottom: var(--border-thick); }
+
+        .accordion-content {
+            padding: var(--space-md);
+            font-weight: 600;
+            font-size: 1rem;
+            white-space: pre-line;
+            background: var(--paper);
+        }
+
+        .danger-zone summary { background: var(--black) !important; color: var(--white); }
+        .danger-zone .accordion-content { background: var(--white); color: var(--black); border-top: var(--border-thick); }
+
+        .badge-now {
+            background: var(--white);
+            color: var(--black);
+            padding: 2px 6px;
+            margin-left: 8px;
+            font-size: 0.8rem;
+            border: 1px solid var(--black);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="title-block">
+            <h1 class="sys-font">LIFE SYSTEM</h1><br>
+            <p>10 WEEKS / TARGET: 23 JUN 26</p>
+        </div>
+
+        <div class="clock-badge sys-font" id="clock">00:00:00</div>
+
+        <div class="controls-block">
+            <select id="week-select" onchange="updateDashboard()">
+                <option value="1">WEEK 1-2 [ADAPT]</option>
+                <option value="3">WEEK 3-4 [BURN]</option>
+                <option value="5">WEEK 5-7 [SHRED]</option>
+                <option value="8">WEEK 8-10 [BEAST]</option>
+            </select>
+            <select id="day-select" onchange="updateDashboard()">
+                <option value="1">DAY: MONDAY</option>
+                <option value="2">DAY: TUESDAY</option>
+                <option value="3">DAY: WEDNESDAY</option>
+                <option value="4">DAY: THURSDAY</option>
+                <option value="5">DAY: FRIDAY</option>
+                <option value="6">DAY: SATURDAY</option>
+                <option value="0">DAY: SUNDAY</option>
+            </select>
+        </div>
+    </header>
+
+    <section class="target-grid">
+        <div class="target-card">
+            <div class="target-header bg-level-1 sys-font">06:00 CARDIO</div>
+            <div class="target-body" id="t-cardio"></div>
+        </div>
+        <div class="target-card">
+            <div class="target-header bg-level-2 sys-font">17:30 WORKOUT</div>
+            <div class="target-body" id="t-workout"></div>
+        </div>
+        <div class="target-card">
+            <div class="target-header bg-level-3 sys-font">15:15 STUDY</div>
+            <div class="target-body" id="t-study"></div>
+        </div>
+    </section>
+
+    <section class="routine-grid">
+
+        <div class="col-wrapper">
+            <div class="col-header-box bg-level-1 sys-font">MORNING</div>
+            <div class="task-container" id="col-morning"></div>
+        </div>
+
+        <div class="col-wrapper">
+            <div class="col-header-box bg-level-2 sys-font">AFTERNOON</div>
+            <div class="task-container" id="col-afternoon"></div>
+        </div>
+
+        <div class="col-wrapper">
+            <div class="col-header-box bg-level-4 sys-font">EVENING</div>
+            <div class="task-container" id="col-evening"></div>
+        </div>
+
+    </section>
+
+    <section>
+        <div style="text-align: center;">
+            <h2 class="db-header sys-font">SYSTEM DATABASE</h2>
+        </div>
+
+        <details class="accordion" open>
+            <summary class="sys-font">TARGETS & RESULTS</summary>
+            <div class="accordion-content">[ร่างกาย]
+- ลดน้ำหนัก 7 - 12 kg (0.7 - 1.2 kg/สัปดาห์)
+- ไขมันลด กล้ามไม่หาย หุ่นกระชับ
+- ความฟิตดีขึ้น วิ่งได้นานขึ้น
+
+[การเรียน/อาชีพ]
+- MERN stack ทำโปรเจกต์ได้จริง
+- Cyber พื้นฐานแน่น (Linux/Network/Security basics)
+- Mobile พื้นฐานพอเริ่มทำแอปได้
+- GitHub commit ต่อเนื่องทุกวัน
+
+[ศาสนา]
+- ละหมาดครบ 5 เวลา + สุนัตหลัก (ถ้าทำได้)
+- อ่านอัลกุรอานทุกวัน (ขั้นต่ำ 1 หน้า)
+- ซิกรุลลอฮ์ + ดุอาอ์เป็นนิสัย
+- ฟิกฮ์/เตาฮีด/อากีดะฮ์ อ่านสม่ำเสมอ
+
+[ภาษาอังกฤษ]
+- ฟัง/อ่าน/เขียนทุกวัน
+- Vocabulary + Speaking เพิ่มขึ้นจริง
+
+📈 ผลลัพธ์ที่คาดได้จริง (10 สัปดาห์)
+- ลด 7 - 12 kg
+- รอบเอวลดชัด
+- ฟิตขึ้นมาก
+- โค้ดทุกวัน -> โปรเจกต์เริ่มเป็นรูปเป็นร่าง
+- ละหมาด/กุรอาน/ศาสนาเป็นนิสัยจริง</div>
+        </details>
+
+        <details class="accordion">
+            <summary class="sys-font">10 GOLDEN RULES</summary>
+            <div class="accordion-content">1) ละหมาดครบ 5 เวลา (ห้ามขาด)
+2) อ่านอัลกุรอานทุกวัน (ขั้นต่ำ 5-10 นาที)
+3) เช้า 06:00-07:00 เดิน/วิ่งทุกวัน
+4) เย็น 17:30-19:00 เวท/HIIT 6 วัน/สัปดาห์
+5) โปรตีน 150-180g/วัน
+6) แคลรวม 1700-1900 kcal/วัน
+7) น้ำ 3 ลิตร/วัน
+8) โค้ด/เรียนรวม 5-7 ชั่วโมง/วัน
+9) อังกฤษทุกวัน 30-60 นาที
+10) นอน 21:00-04:00 ห้ามเลื่อน</div>
+        </details>
+
+        <details class="accordion">
+            <summary class="sys-font">FOOD SYSTEM</summary>
+            <div class="accordion-content">🎯 เป้าหมายต่อวัน
+- โปรตีน: 150-180g
+- แคล: 1700-1900 kcal
+- น้ำ: 3 ลิตร
+
+มื้อเช้า (07:15)
+- ข้าวโอ๊ต 60g
+- เวย์ 1 สกูป
+- กล้วย 1 ลูก
+
+มื้อกลางวัน (12:10)
+- อกไก่/สันในไก่ 300g+
+- ข้าว 1 ทัพพี (โหดมาก = ครึ่งทัพพี)
+- ผักเยอะๆ
+
+Pre-workout (16:30)
+- เวย์ 1/2 สกูป หรือ ไข่ 2 ฟอง
+
+มื้อเย็น (19:20)
+- อกไก่ 250g หรือ ทูน่า 1 กระป๋อง
+- ไข่ 2 ฟอง
+- ผักเยอะๆ
+- งดข้าวถ้าจะลดไว
+
+ก่อนนอน (ถ้าหิว)
+- เวย์ 1/2 สกูป หรือ โยเกิร์ตไขมันต่ำ</div>
+        </details>
+
+        <details class="accordion">
+            <summary class="sys-font">ISLAMIC STUDY</summary>
+            <div class="accordion-content">📖 Quran (ทุกวัน)
+- หลังฟัรญ์: 2-4 หน้า (ขั้นต่ำ)
+- ถ้าขยันเพิ่ม: หลังมัฆริบ 1 หน้า
+- เป้าหมาย 10 สัปดาห์: อย่างน้อย 1 ญุซ (หรือมากกว่านั้น)
+
+📘 ฟิกฮ์ / เตาฮีด / อากีดะฮ์
+- เช้า 10 นาที (05:20-05:30)
+- เย็น 10 นาที (ก่อนนอนหรือหลังอิชาอ์)
+- เป้าหมาย: อ่านจบอย่างน้อย 1 เล่มเล็ก
+
+🤲 ซิกรและดุอาอ์
+- หลังละหมาดทุกเวลา 1-3 นาที
+- ซิกรเช้า/เย็น (อัดน้อยแต่ทุกวัน)
+- ก่อนนอน: อายะตุลกุรซี + 3 กุล + ดุอาอ์
+
+🕌 ละหมาดสุนัต (ถ้าทำได้)
+- ซุนนะฮฺฟัรญ์ 2 ร็อกอะฮฺ (สำคัญมาก)
+- วิตรฺหลังอิชาอ์ (1-3 ร็อกอะฮฺ)</div>
+        </details>
+
+        <details class="accordion">
+            <summary class="sys-font">CODING & ENGLISH</summary>
+            <div class="accordion-content">[ CODING SYSTEM ]
+Block 1 (08:00-10:00) Project Work: ทำโปรเจกต์จริง 100%
+Block 2 (10:15-11:45) Learning: API / Auth / DB / Deployment
+Block 3 (13:10-14:30) Build Feature: ทำระบบใหม่ทุกวัน
+Block 4 (15:15-16:15) Cyber/Mobile: สลับวัน
+Block 5 (20:20-20:40) GitHub: Commit ทุกวัน
+
+[ ENGLISH SYSTEM ]
+ENGLISH BLOCK #1 (16:15-16:30): Vocabulary 10 คำ/วัน + เขียนประโยค 10 ประโยค
+ENGLISH BLOCK #2 (19:50-20:20): Listening 20 นาที + Shadowing 10 นาที + Summary 5 บรรทัด</div>
+        </details>
+
+        <details class="accordion danger-zone">
+            <summary class="sys-font">RESTRICTIONS & WARNINGS</summary>
+            <div class="accordion-content">❌ ของต้องห้าม (ถ้าอยากเห็นผลไว)
+- น้ำหวาน / ชานม / น้ำอัดลม
+- ของทอด
+- เบเกอรี่
+- ขนมกรุบกรอบ
+- กินดึกหลัง 19:30
+
+⚠️ ข้อควรระวัง (ไม่งั้นพัง)
+- เจ็บเข่า/ข้อเท้า -> ลดวิ่ง เปลี่ยนเป็นเดิน
+- อ่อนแรงมาก -> เพิ่มคาร์บ 1 ทัพพี
+- ห้ามลดแคลต่ำกว่า 1500
+- ห้ามซ้อมจนเจ็บเรื้อรัง</div>
+        </details>
+    </section>
+
+    <script>
+        // --- FULL TEXT DATA 100% ---
+        const routine = [
+            { start: "04:00", end: "04:10", title: "ตื่น", desc: "- ดื่มน้ำ 500 ml\n- ล้างหน้า / อาบน้ำสั้นๆ\n- กาแฟดำได้ (ห้ามน้ำตาล)" },
+            { start: "04:10", end: "04:25", title: "เตรียมตัวละหมาด + ซิกรุลลอฮ์", desc: "- อุฎูอ์\n- ซิกรฺเช้าเบื้องต้น (5 นาที)\n- ตั้งเจตนา (นิยะฮ์) ว่าวันนี้จะทำเพื่ออัลลอฮ์" },
+            { start: "04:25", end: "04:45", title: "ละหมาดศุบฮฺ (Fajr)", desc: "- ซุนนะฮฺ 2 ร็อกอะฮฺ (ถ้าทำได้)\n- ฟัรฎู 2 ร็อกอะฮฺ\n- ดุอาอ์หลังละหมาด 3-5 นาที" },
+            { start: "04:45", end: "05:20", title: "อัลกุรอาน (Quran Block)", desc: "- อ่านอัลกุรอาน 2-4 หน้า (ขั้นต่ำ)\n- ถ้ามีเวลา: อ่านตัฟซีรฺสั้นๆ 5 นาที\n- เป้าหมาย: 'อ่านทุกวัน' ไม่ต้องเยอะ แต่ต้องสม่ำเสมอ" },
+            { start: "05:20", end: "05:30", title: "ศาสนา (Quick Islamic Reading)", desc: "- ฟิกฮ์ / เตาฮีด / หะดีษ (อ่านวันละนิด)\n- เป้าหมาย: สะสมความรู้แบบต่อเนื่อง" },
+            { start: "05:30", end: "05:50", title: "PRE-RUN", desc: "- น้ำ 300 ml\n- ถ้าหิวมาก: กล้วย 1 ลูก หรือ เวย์ 1/2 สกูป" },
+            { start: "06:00", end: "07:00", title: "MORNING CARDIO", desc: "- เดิน/วิ่งสลับ (ตามตารางสัปดาห์)" },
+            { start: "07:15", end: "07:40", title: "BREAKFAST (มื้อเช้า)", desc: "- ข้าวโอ๊ต 60g\n- เวย์ 1 สกูป (27g โปรตีน)\n- กล้วย 1 ลูก (ถ้าไม่ได้กินก่อนวิ่ง)" },
+            { start: "07:40", end: "08:00", title: "อาบน้ำ / เตรียมตัว", desc: "- จัดห้อง เตรียมเริ่มงาน" },
+            { start: "08:00", end: "10:00", title: "STUDY BLOCK #1 (CODING)", desc: "- ทำโปรเจกต์จริง (Frontend/Backend)\n- ห้ามอ่านอย่างเดียว ต้อง 'ทำให้เสร็จ'" },
+            { start: "10:00", end: "10:15", title: "BREAK", desc: "- เดินเล่น / ยืดตัว / ดื่มน้ำ" },
+            { start: "10:15", end: "11:45", title: "STUDY BLOCK #2 (LEARN)", desc: "- ดูคอร์ส + จดสรุป + ทำตาม\n- โฟกัส: Node.js, Express, MongoDB, API, Auth" },
+            { start: "11:45", end: "12:10", title: "เตรียมละหมาดซุฮฺร์ (Dhuhr)", desc: "- อุฎูอ์ + ดุอาอ์\n- ละหมาดฟัรฎู (และซุนนะฮฺถ้าไหว)" },
+            { start: "12:10", end: "12:40", title: "LUNCH (มื้อกลางวัน)", desc: "- อกไก่/สันในไก่ 300g+\n- ข้าว 1 ทัพพี (โหดมาก = ครึ่งทัพพี)\n- ผักเยอะๆ" },
+            { start: "12:40", end: "13:10", title: "WALK", desc: "- เดิน 15-30 นาที (ช่วยลดพุง + คุมอินซูลิน)" },
+            { start: "13:10", end: "14:30", title: "STUDY BLOCK #3 (BUILD)", desc: "- ทำ Feature จริง: Login/Register, CRUD, REST API, UI" },
+            { start: "14:30", end: "15:00", title: "POWER NAP", desc: "- งีบ 20 นาที (ไม่เกิน 30 นาที)" },
+            { start: "15:00", end: "15:15", title: "ละหมาดอัศรฺ (Asr)", desc: "- ฟัรฎู 4 ร็อกอะฮฺ\n- ดุอาอ์สั้นๆ" },
+            { start: "15:15", end: "16:15", title: "STUDY BLOCK #4 (CYBER/MOBILE)", desc: "- สลับวันตามตารางวันคู่/คี่" },
+            { start: "16:15", end: "16:30", title: "ENGLISH BLOCK #1", desc: "- Vocabulary 10 คำ + เขียนประโยค\n- หรืออ่านบทความสั้น 1 หน้า" },
+            { start: "16:30", end: "17:00", title: "PRE-WORKOUT", desc: "- เวย์ 1/2 สกูป หรือ ไข่ต้ม 2 ฟอง หรือ กล้วย 1 ลูก" },
+            { start: "17:00", end: "17:20", title: "ละหมาดมัฆริบ (Maghrib)", desc: "- ฟัรฎู 3 ร็อกอะฮฺ\n- ดุอาอ์ 3-5 นาที" },
+            { start: "17:30", end: "19:00", title: "EVENING TRAINING", desc: "- เวท + HIIT (ตามตารางของวัน)" },
+            { start: "19:00", end: "19:20", title: "ละหมาดอิชาอ์ (Isha)", desc: "- ฟัรฎู 4 ร็อกอะฮฺ\n- ถ้าไหว: วิตรฺ 1-3 ร็อกอะฮฺ (แนะนำ)" },
+            { start: "19:20", end: "19:50", title: "DINNER (มื้อเย็น)", desc: "- อกไก่ 250g หรือ ทูน่า 1 กระป๋อง\n- ไข่ 2 ฟอง\n- ผักเยอะๆ\n- งดข้าวถ้าจะลดไว" },
+            { start: "19:50", end: "20:20", title: "ENGLISH BLOCK #2", desc: "- ฟัง Podcast / YouTube English\n- พูดตาม (Shadowing) 10 นาที\n- เขียนสรุป 5 บรรทัด" },
+            { start: "20:20", end: "20:40", title: "STUDY BLOCK #5 (REVIEW)", desc: "- Commit GitHub\n- สรุปสิ่งที่เรียนวันนี้\n- วางแผนพรุ่งนี้ (Todo 3 อย่าง)" },
+            { start: "20:40", end: "21:00", title: "NO SCREEN + เตรียมนอน", desc: "- ยืดกล้าม 10 นาที\n- ซิกรก่อนนอน\n- ดุอาอ์ก่อนนอน" },
+            { start: "21:00", end: "04:00", title: "SLEEP", desc: "นอนหลับ (7 ชั่วโมง)" }
+        ];
+
+        const cardioData = {
+            "1": "เดินเร็ว 10m\nวิ่ง 1m + เดินเร็ว 2m (15 รอบ)\nเดินช้า 5m",
+            "3": "เดินเร็ว 10m\nวิ่ง 2m + เดินเร็ว 1m (15 รอบ)\nเดินช้า 5m",
+            "5": "เดินเร็ว 10m\nวิ่ง 3m + เดิน 1m (12 รอบ)\nเดินช้า 2m",
+            "8": "เดินเร็ว 10m\nวิ่ง 5m + เดิน 1m (8 รอบ)\nเดินช้า 2m"
+        };
+
+        const workoutData = [
+            "อาทิตย์ (พัก)\n- พักจริง / เดินเล่น 20-30 นาทีได้",
+            "จันทร์ (Full Body A + Jump Rope)\n1) Goblet Squat 4x12\n2) DB RDL 4x12\n3) Push-up 4x15\n4) DB Row 4x12/ข้าง\n5) Shoulder Press 3x12\n6) Plank 3x60 วิ\n+ โดดเชือก 10 นาที",
+            "อังคาร (Sandbag HIIT + Core)\nCircuit 5 รอบ:\n- Sandbag Clean & Press 12\n- Sandbag Front Squat 12\n- Burpees 10\n- Mountain climber 40 วิ\n- Sit-up 20",
+            "พุธ (Upper Body + Jump Rope)\n1) Floor Press 4x12\n2) DB Row 4x12\n3) Shoulder Press 4x10\n4) Lateral Raise 3x15\n5) Bicep Curl 3x12\n6) Tricep Ext 3x12\n7) Plank 3x60 วิ\n+ โดดเชือก 12 นาที",
+            "พฤหัส (Leg Day + Fat Burn)\n1) Goblet Squat 5x10\n2) DB Lunge 4x12\n3) RDL 4x12\n4) Calf Raise 4x20\n5) Leg Raise 3x15\n6) Russian Twist 3x30\n+ เดินเร็ว 15 นาที",
+            "ศุกร์ (Sandbag + Jump Rope โหดสุด)\nCircuit 6 รอบ:\n- Deadlift 15\n- Shoulder Carry 30 วิ\n- Push-up 15\n- Jump Squat 12\n+ โดดเชือก 10 นาที",
+            "เสาร์ (Recovery Cardio)\nเลือก 1:\n- เดินเร็ว 60 นาที\n- เดิน 30 นาที + โดดเชือก 15 นาที"
+        ];
+
+        // Set current day on load
+        document.getElementById('day-select').value = new Date().getDay();
+
+        function timeToMinutes(t) {
+            let [h, m] = t.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function getColumnCategory(start) {
+            let m = timeToMinutes(start);
+            if (m >= 240 && m < 705) return 'morning'; // 04:00 - 11:45
+            if (m >= 705 && m < 990) return 'afternoon'; // 11:45 - 16:30
+            return 'evening'; // 16:30 - 04:00
+        }
+
+        function renderRoutine() {
+            document.getElementById('col-morning').innerHTML = '';
+            document.getElementById('col-afternoon').innerHTML = '';
+            document.getElementById('col-evening').innerHTML = '';
+
+            let now = new Date();
+            let currentMins = now.getHours() * 60 + now.getMinutes();
+
+            routine.forEach(task => {
+                let startMins = timeToMinutes(task.start);
+                let endMins = timeToMinutes(task.end);
+
+                let status = '';
+                if (startMins > endMins) { // Overnight task (sleep)
+                    if (currentMins >= startMins || currentMins < endMins) status = 'current';
+                    else if (currentMins >= endMins && currentMins < startMins) status = 'past';
+                } else {
+                    if (currentMins >= startMins && currentMins < endMins) status = 'current';
+                    else if (currentMins >= endMins) status = 'past';
+                }
+
+                let colId = `col-${getColumnCategory(task.start)}`;
+
+                let div = document.createElement('div');
+                div.className = `task-item ${status}`;
+                if(status === 'current') div.id = 'current-task-focus';
+
+                div.innerHTML = `
+                    <div class="t-time sys-font">${task.start} - ${task.end} ${status==='current'?'<span class="badge-now">FOCUS</span>':''}</div>
+                    <div class="t-title sys-font">${task.title}</div>
+                    <div class="t-desc">${task.desc}</div>
+                `;
+
+                document.getElementById(colId).appendChild(div);
+            });
+
+            // Scroll for mobile
+            if(window.innerWidth < 1200) {
+                setTimeout(() => {
+                    let cur = document.getElementById('current-task-focus');
+                    if(cur) cur.scrollIntoView({behavior: "smooth", block: "center"});
+                }, 500);
+            }
+        }
+
+        function updateDashboard() {
+            let week = document.getElementById('week-select').value;
+            let day = document.getElementById('day-select').value;
+
+            document.getElementById('t-cardio').innerText = cardioData[week];
+            document.getElementById('t-workout').innerText = workoutData[day];
+
+            let isOdd = day % 2 !== 0;
+            document.getElementById('t-study').innerText = isOdd
+                ? "[วันคี่] CYBER\nLinux/Network/Security basics"
+                : "[วันคู่] MOBILE\nFlutter/React Native พื้นฐาน";
+        }
+
+        function updateClock() {
+            document.getElementById('clock').textContent = new Date().toLocaleTimeString('th-TH');
+        }
+
+        setInterval(updateClock, 1000);
+        setInterval(renderRoutine, 60000);
+
+        updateClock();
+        updateDashboard();
+        renderRoutine();
+
+    </script>
+</body>
+</html>
